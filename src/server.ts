@@ -42,7 +42,7 @@ export interface I18n {
     localizeUrl(url: string, configOverride?: {
         locale?: string;
     }): string;
-    parseUrl(config: I18nConfig, url: string): {
+    parseUrl(url: string): {
         locale: string;
         cleanUrl: string;
     };
