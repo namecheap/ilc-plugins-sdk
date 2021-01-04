@@ -51,5 +51,5 @@ export interface I18n {
 
 export declare interface I18nParamsDetectionPlugin {
     type: 'i18nParamsDetection';
-    getI18nConfig: (req: http.IncomingMessage, i18n: I18n, config: I18nConfig) => Promise<I18nConfig>;
+    detectI18nConfig: (req: http.IncomingMessage, i18n: I18n, storedConfig: I18nConfig) => Promise<I18nConfig>;
 }
