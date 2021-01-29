@@ -53,3 +53,30 @@ export declare interface I18nParamsDetectionPlugin {
     type: 'i18nParamsDetection';
     detectI18nConfig: (req: http.IncomingMessage, i18n: I18n, storedConfig: I18nConfig) => Promise<I18nConfig>;
 }
+
+export interface ServerRoute {
+    meta: object;
+}
+
+export interface ServerTransitionContinue {
+    type: 'continue';
+}
+
+export interface ServerTransitionRedirect {
+    type: 'redirect';
+    newLocation: string;
+}
+
+export type ServerTransitionResult = ServerTransitionContinue | ServerTransitionRedirect
+
+export interface ServerTransition {
+    route: ServerRoute;
+    req: http.IncomingMessage;
+}
+
+export type ServerTransitionHook = (transition: ServerTransition) => Promise<ServerTransitionResult>
+
+export declare interface ServerTransitionHooksPlugin {
+    type: 'transitionHooks';
+    getTransitionHooks: () => Array<ServerTransitionHook>;
+}
