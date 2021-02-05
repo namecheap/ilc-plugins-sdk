@@ -5,7 +5,9 @@
   "main": "dist/server.js",
   "types": "dist/server.d.ts",
   "files": [
-    "dist/**"
+    "dist/**",
+    "browser.js",
+    "browser.d.ts"
   ],
   "scripts": {
     "build": "tsc",

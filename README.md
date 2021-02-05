@@ -31,7 +31,44 @@ RUN npm i ilc-plugin-yourpluginname
 
 ## Supported plugin types
 
-### Reporting plugin
+### Server side plugins
 
-Should implement `IlcReportingPlugin` interface. Allows to customize logs output of the ILC container and optionally set 
+Plugins of this type should provide single entry point for the server implementation. 
+It will be detected via `main` property in your `package.json`.
+
+#### Reporting plugin
+
+Should implement `IlcReportingPlugin` interface. Allows customizing logs output of the ILC container and optionally set 
 custom behaviour for request ID generation & handling.
+
+
+#### I18n params detection plugin
+
+Should implement `I18nParamsDetectionPlugin` interface. 
+
+### Isomorphic plugins
+
+Plugins of this type should provide 2 entry points, for the server & browser side respectively. 
+Server side entrypoint will be detected via `main` property in your `package.json`. While entrypoint
+for a browser side implementation expected to be in `browser.js` file in the root folder of NPM package.
+
+Same approach should be used to fetch necessary interfaces for the server & browser side implementation:
+
+Server side:
+```typescript
+import { TransitionHooksPlugin } from 'ilc-plugins-sdk';
+```
+
+Browser side:
+```typescript
+import { TransitionHooksPlugin } from 'ilc-plugins-sdk/browser';
+```
+
+#### Transition hooks plugin
+
+Allows to set up route change hooks which may:
+- Prevent routing & display some UI.
+- Perform the redirect to another page.
+- Allow route change.
+
+Should implement `TransitionHooksPlugin` interface for the browser & server side. 
