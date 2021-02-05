@@ -1,31 +1,20 @@
-export interface ClientRoute {
-    url: string;
-    meta: object;
-}
+import {
+    Route,
+    TransitionContinue,
+    TransitionRedirect,
+    TransitionStopNavigation,
+} from './common';
 
-export interface ClientTransitionContinue {
-    type: 'continue';
-}
+export type TransitionResult = TransitionContinue | TransitionRedirect | TransitionStopNavigation
 
-export interface ClientTransitionRedirect {
-    type: 'redirect';
-    newLocation: string;
-}
-
-export interface ClientTransitionStopNavigation {
-    type: 'stop-navigation';
-}
-
-export type ClientTransitionResult = ClientTransitionContinue | ClientTransitionRedirect | ClientTransitionStopNavigation
-
-export interface ClientTransition {
-    route: ClientRoute,
+export interface Transition {
+    route: Route,
     navigate: (url: string) => void,
 }
 
-export type ClientTransitionHook = (transition: ClientTransition) => ClientTransitionResult
+export type TransitionHook = (transition: Transition) => TransitionResult
 
-export declare interface ClientTransitionHooksPlugin {
+export declare interface TransitionHooksPlugin {
     type: 'transitionHooks',
-    getTransitionHooks: () => Array<ClientTransitionHook>
+    getTransitionHooks: () => Array<TransitionHook>
 }

@@ -1,4 +1,9 @@
 import http from 'http';
+import {
+    Route,
+    TransitionContinue,
+    TransitionRedirect,
+} from './common';
 
 export interface Logger {
     fatal(msg: string, ...args: any[]): void;
@@ -54,29 +59,16 @@ export declare interface I18nParamsDetectionPlugin {
     detectI18nConfig: (req: http.IncomingMessage, i18n: I18n, storedConfig: I18nConfig) => Promise<I18nConfig>;
 }
 
-export interface ServerRoute {
-    meta: object;
-}
+export type TransitionResult = TransitionContinue | TransitionRedirect
 
-export interface ServerTransitionContinue {
-    type: 'continue';
-}
-
-export interface ServerTransitionRedirect {
-    type: 'redirect';
-    newLocation: string;
-}
-
-export type ServerTransitionResult = ServerTransitionContinue | ServerTransitionRedirect
-
-export interface ServerTransition {
-    route: ServerRoute;
+export interface Transition {
+    route: Route;
     req: http.IncomingMessage;
 }
 
-export type ServerTransitionHook = (transition: ServerTransition) => Promise<ServerTransitionResult>
+export type TransitionHook = (transition: Transition) => Promise<TransitionResult>
 
-export declare interface ServerTransitionHooksPlugin {
+export declare interface TransitionHooksPlugin {
     type: 'transitionHooks';
-    getTransitionHooks: () => Array<ServerTransitionHook>;
+    getTransitionHooks: () => Array<TransitionHook>;
 }
