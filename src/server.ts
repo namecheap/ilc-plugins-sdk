@@ -64,6 +64,7 @@ export type TransitionResult = TransitionContinue | TransitionRedirect
 export interface Transition {
     route: Route;
     req: http.IncomingMessage;
+    log: Logger,
 }
 
 export type TransitionHook = (transition: Transition) => Promise<TransitionResult>
