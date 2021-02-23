@@ -4,7 +4,6 @@ import {
 
 import {
     Plugin,
-    PluginTypes,
 } from '../../pluginManager/server.types';
 
 export declare class IlcError implements Error {
@@ -19,7 +18,7 @@ export declare class IlcError implements Error {
 }
 
 export declare interface IlcReportingPlugin extends Plugin {
-    type: PluginTypes.reporting;
+    type: 'reporting';
     logger: Logger;
     requestIdLogLabel?: string;
     genReqId?: () => string;

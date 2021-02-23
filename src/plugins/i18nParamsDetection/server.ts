@@ -6,10 +6,6 @@ import {
     I18nParamsDetectionPlugin,
 } from './server.types';
 
-import {
-    PluginTypes,
-} from '../../pluginManager/server.types';
-
 const detectI18nConfig = async (req: http.IncomingMessage, Intl: I18n, storedConfig: I18nConfig, storedConfigFromCookie?: I18nConfig): Promise<I18nConfig> => {
     const currI18nConf = {...storedConfig};
 
@@ -22,7 +18,7 @@ const detectI18nConfig = async (req: http.IncomingMessage, Intl: I18n, storedCon
 };
 
 const plugin: I18nParamsDetectionPlugin = {
-    type: PluginTypes.i18nParamsDetection,
+    type: 'i18nParamsDetection',
     detectI18nConfig,
 };
 

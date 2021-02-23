@@ -2,7 +2,6 @@ import chai from 'chai';
 import assert from 'assert';
 
 import {
-    PluginTypes,
     PluginManagerPublicApi,
 } from './server.types';
 
@@ -19,20 +18,20 @@ describe('PluginManager', () => {
 
     describe('when trying to get a plugin that is existed', () => {
         const reportingPlugin = {
-            type: PluginTypes.reporting,
+            type: 'reporting',
             property: 'propertyOfReportingPlugin',
             method: () => {},
         };
 
         const i18nParamsDetectionPlugin = {
-            type: PluginTypes.i18nParamsDetection,
+            type: 'i18nParamsDetection',
             property: 'propertyOfI18nParamsDetectionPlugin',
             method: () => {},
         };
 
         const transitionHooksPlugin = {
             default: {
-                type: PluginTypes.transitionHooks,
+                type: 'transitionHooks',
                 property: 'propertyOfTransitionHooksPlugin',
                 method: () => {},
             },
@@ -51,7 +50,7 @@ describe('PluginManager', () => {
             [PluginPaths.i18nParamsDetection]: i18nParamsDetectionPlugin,
             [PluginPaths.transitionHooks]: transitionHooksPlugin,
             [PluginPaths.cloneOfReporting]: {
-                type: PluginTypes.reporting,
+                type: 'reporting',
                 property: 'propertyOfCloneOfReportingPlugin',
                 method: () => {},
             },

@@ -1,10 +1,6 @@
 import path from 'path';
 import fg from 'fast-glob';
 
-import {
-    PluginTypes,
-} from '../pluginManager/browser.types';
-
 // TODO: cover the following code with Typescript types
 export default class ResolveIlcDefaultPluginsWebpackPlugin {
     private source = 'resolve';
@@ -33,7 +29,7 @@ export default class ResolveIlcDefaultPluginsWebpackPlugin {
                     const module = require(pluginPath);
                     const plugin = module.default || module;
 
-                    if (plugin.type === PluginTypes.transitionHooks) {
+                    if (plugin.type === 'transitionHooks') {
                         nextRequest = Object.assign({}, nextRequest, {
                             path: pluginPath,
                             request: '',
@@ -44,7 +40,7 @@ export default class ResolveIlcDefaultPluginsWebpackPlugin {
                         });
 
                         if (resolveContext.log) {
-                            resolveContext.log(`A default plugin with type "${PluginTypes.transitionHooks}" from "ilc-plugins-sdk" has excluded because a custom plugin installed at "${pluginPath}".`);
+                            resolveContext.log(`A default plugin with type "transitionHooks" from "ilc-plugins-sdk" has excluded because a custom plugin installed at "${pluginPath}".`);
                         }
 
                         break;

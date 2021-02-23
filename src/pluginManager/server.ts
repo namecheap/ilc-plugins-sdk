@@ -2,7 +2,6 @@ import CommonPluginManager from './common';
 
 import {
     Context,
-    PluginTypes,
     PluginManagerPublicApi,
 } from './server.types';
 
@@ -18,18 +17,18 @@ import i18nParamsDetectionPlugin from '../plugins/i18nParamsDetection/server';
 
 export default class PluginManager extends CommonPluginManager implements PluginManagerPublicApi {
     constructor(...contexts: Array<Context>) {
-        super([PluginTypes.reporting, PluginTypes.transitionHooks, PluginTypes.i18nParamsDetection], ...contexts);
+        super(['reporting', 'transitionHooks', 'i18nParamsDetection'], ...contexts);
     }
 
     getReportingPlugin() {
-        return this.plugins[PluginTypes.reporting] as IlcReportingPlugin || reportingPlugin;
+        return this.plugins['reporting'] as IlcReportingPlugin || reportingPlugin;
     }
 
     getTransitionHooksPlugin() {
-        return this.plugins[PluginTypes.transitionHooks] as TransitionHooksPlugin || transitionHooksPlugin;
+        return this.plugins['transitionHooks'] as TransitionHooksPlugin || transitionHooksPlugin;
     }
 
     getI18nParamsDetectionPlugin() {
-        return this.plugins[PluginTypes.i18nParamsDetection] as I18nParamsDetectionPlugin || i18nParamsDetectionPlugin;
+        return this.plugins['i18nParamsDetection'] as I18nParamsDetectionPlugin || i18nParamsDetectionPlugin;
     }
 }

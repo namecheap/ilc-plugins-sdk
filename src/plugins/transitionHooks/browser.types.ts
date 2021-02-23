@@ -7,7 +7,6 @@ import {
 
 import {
     Plugin,
-    PluginTypes,
 } from '../../pluginManager/browser.types';
 
 export type TransitionResult = TransitionContinue | TransitionRedirect | TransitionStopNavigation
@@ -20,6 +19,6 @@ export interface Transition {
 export type TransitionHook = (transition: Transition) => TransitionResult
 
 export declare interface TransitionHooksPlugin extends Plugin {
-    type: PluginTypes.transitionHooks,
+    type: 'transitionHooks',
     getTransitionHooks: () => Array<TransitionHook>
 }

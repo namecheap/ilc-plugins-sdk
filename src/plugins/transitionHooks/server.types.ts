@@ -12,7 +12,6 @@ import {
 
 import {
     Plugin,
-    PluginTypes,
 } from '../../pluginManager/server.types';
 
 export type TransitionResult = TransitionContinue | TransitionRedirect
@@ -26,6 +25,6 @@ export interface Transition {
 export type TransitionHook = (transition: Transition) => Promise<TransitionResult>
 
 export declare interface TransitionHooksPlugin extends Plugin {
-    type: PluginTypes.transitionHooks;
+    type: 'transitionHooks';
     getTransitionHooks: () => Array<TransitionHook>;
 }

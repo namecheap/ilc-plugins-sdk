@@ -2,14 +2,10 @@ import {
     TransitionHooksPlugin,
 } from './browser.types';
 
-import {
-    PluginTypes,
-} from '../../pluginManager/browser.types';
-
 export const cookieName = 'ilc-plugin-transition-hooks-sample';
 
 const plugin: TransitionHooksPlugin = {
-    type: PluginTypes.transitionHooks,
+    type: 'transitionHooks',
     getTransitionHooks: () => [
         ({
             route,

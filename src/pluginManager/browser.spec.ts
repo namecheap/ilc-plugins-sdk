@@ -2,7 +2,6 @@ import chai from 'chai';
 import assert from 'assert';
 
 import {
-    PluginTypes,
     PluginManagerPublicApi,
 } from './browser.types';
 
@@ -20,7 +19,7 @@ describe('PluginManager', () => {
     describe('when trying to get a plugin that is existed', () => {
         const transitionHooksPlugin = {
             default: {
-                type: PluginTypes.transitionHooks,
+                type: 'transitionHooks',
                 property: 'propertyOfTransitionHooksPlugin',
                 getTransitionHooks: () => {},
             },
@@ -35,7 +34,7 @@ describe('PluginManager', () => {
         const plugins = {
             [PluginPaths.transitionHooks]: transitionHooksPlugin,
             [PluginPaths.cloneOfTransitionHooks]: {
-                type: PluginTypes.transitionHooks,
+                type: 'transitionHooks',
                 property: 'propertyOfCloneOfTransitionHooksPlugin',
                 getTransitionHooks: () => {},
             },

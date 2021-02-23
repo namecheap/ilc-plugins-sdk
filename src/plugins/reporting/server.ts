@@ -9,10 +9,6 @@ import {
     IlcReportingPlugin,
 } from './server.types';
 
-import {
-    PluginTypes,
-} from '../../pluginManager/server.types';
-
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const httpHeaders = require('http-headers');
 
@@ -87,7 +83,7 @@ const pinoConf: pino.LoggerOptions = {
 };
 
 const plugin: IlcReportingPlugin = {
-    type: PluginTypes.reporting,
+    type: 'reporting',
     /**
      * We need this to being able to capture stdout of the app
      * As for pure "process.stdout" uses faster logs output via sonic-boom which is hard to intercept
