@@ -7,7 +7,9 @@
   "files": [
     "dist/**",
     "browser.js",
-    "browser.d.ts"
+    "browser.d.ts",
+    "webpack.js",
+    "webpack.d.ts"
   ],
   "scripts": {
     "build": "tsc",
