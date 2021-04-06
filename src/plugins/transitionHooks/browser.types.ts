@@ -13,6 +13,7 @@ export type TransitionResult = TransitionContinue | TransitionRedirect | Transit
 
 export interface Transition {
     route: Route,
+    prevRoute: Route,
     navigate: (url: string) => void,
 }
 
