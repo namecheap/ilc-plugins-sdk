@@ -3,6 +3,7 @@ export interface Route {
     meta: {
         [key: string]: any,
     };
+    hostname: string;
 }
 
 export interface TransitionContinue {

@@ -40,6 +40,7 @@ describe('Server transition hooks suite', () => {
                 protected: false,
             },
             url: '/some/url',
+            hostname: 'example.com',
         };
 
         const req = {
@@ -61,6 +62,7 @@ describe('Server transition hooks suite', () => {
                 protected: true,
             },
             url: '/some/url',
+            hostname: 'example.com',
         };
 
         const req = {
@@ -84,6 +86,7 @@ describe('Server transition hooks suite', () => {
                 protected: true,
             },
             url: '/some/url',
+            hostname: 'example.com',
         };
 
         const req = {
@@ -104,6 +107,7 @@ describe('Server transition hooks suite', () => {
                 protected: true,
             },
             url: '/some/url',
+            hostname: 'example.com',
         };
 
         const req = {
