@@ -31,12 +31,12 @@ jobs:
         run: npm run test:ci
 
       - name: Run tests coverage
-        run: npm run test:coverage && mv .nyc_output/* /artifacts/ilc-plugins-sdk/.nyc_output
+        run: npm run test:coverage
 
       - uses: actions/upload-artifact@v2
         with:
-          name: server-side-tests-artifacts
-          path: /artifacts/ilc-plugins-sdk/.nyc_output
+          name: Test coverage
+          path: .nyc_output
 
       - name: Build
         run: npm run build
