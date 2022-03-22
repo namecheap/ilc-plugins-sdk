@@ -11,8 +11,7 @@ import {
 
 import { LogEntryRequiredFields } from './LogEntryRequiredFields';
 import { LogEntryFields } from './LogEntryFields';
-import {LogError} from "./LogError";
-import {LogUnexpectedError} from "./LogUnexpectedError";
+import { LogError } from "./LogError";
 
 // Since process is starting by npm start npm_package_version env var is available
 const version = process.env.npm_package_version;
@@ -33,9 +32,7 @@ const pinoConf: pino.LoggerOptions = {
 
             if (inputArgs[0] instanceof Error) {
                 const err = inputArgs[0];
-                const errorLog = inputArgs[0] instanceof IlcError
-                    ? new LogError(err)
-                    : new LogUnexpectedError(err);
+                const errorLog = new LogError(err as IlcError);
 
                 inputArgs[0] = errorLog.serialize();
 
@@ -46,36 +43,6 @@ const pinoConf: pino.LoggerOptions = {
 
             return method.apply(this, inputArgs as any);
         }
-    },
-
-    serializers: {
-        res(res) {
-            const r = {
-                statusCode: res.statusCode,
-                headers: {},
-            };
-
-            if (r.statusCode >= 300 && r.statusCode < 400) {
-                const headers = httpHeaders(res, true);
-                if (headers['location']) {
-                    r.headers = {
-                        location: headers['location']
-                    };
-                }
-            }
-
-            return r;
-        },
-        // req (request) {
-        //     return {
-        //         test: {
-        //             method: request.method,
-        //             url: request.url,
-        //             path: request.routerPath,
-        //             parameters: request.params,
-        //         }
-        //     };
-        // }
     },
 };
 
