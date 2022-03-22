@@ -9,58 +9,45 @@ import {
     IlcReportingPlugin,
 } from './server.types';
 
+import { LogEntryRequiredFields } from './LogEntryRequiredFields';
+import { LogEntryFields } from './LogEntryFields';
+import {LogError} from "./LogError";
+import {LogUnexpectedError} from "./LogUnexpectedError";
+
+// Since process is starting by npm start npm_package_version env var is available
+const version = process.env.npm_package_version;
+const logItemRequiredFields = new LogEntryRequiredFields({
+    version: version || '0.0.0',
+});
+
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const httpHeaders = require('http-headers');
 
 const pinoConf: pino.LoggerOptions = {
     level: 'info',
-    // nestedKey: 'payload', TODO: blocked by https://github.com/pinojs/pino/issues/883
+    messageKey: 'message',
+    base: logItemRequiredFields.serialize(),
     hooks: {
         logMethod(inputArgs, method) {
+
             if (inputArgs[0] instanceof Error) {
-                const err = inputArgs[0] as IlcError;
+                const err = inputArgs[0];
+                const errorLog = inputArgs[0] instanceof IlcError
+                    ? new LogError(err)
+                    : new LogUnexpectedError(err);
 
-                const causeData = [];
-                let rawErr = err.cause as IlcError;
-                while (rawErr) {
-                    if (rawErr.data) {
-                        causeData.push(rawErr.data);
-                    } else {
-                        causeData.push({});
-                    }
-                    rawErr = rawErr.cause as IlcError;
-                }
+                inputArgs[0] = errorLog.serialize();
 
-                const logObj: {
-                    type: string,
-                    message: string,
-                    stack?: Array<string>,
-                    additionalInfo?: {
-                        [key: string]: any,
-                    },
-                    causeData?: Array<{
-                        [key: string]: any,
-                    }>,
-                } = {
-                    type: err.name,
-                    message: err.message,
-                    stack: err.stack?.split("\n"),
-                };
-
-                if (err.data) {
-                    logObj.additionalInfo = err.data;
-                }
-
-                if (causeData.length) {
-                    logObj.causeData = causeData;
-                }
-
-                inputArgs[0] = logObj;
+            } else if(typeof inputArgs[0] === 'object' && inputArgs[0] !== null) {
+                const logEntry = new LogEntryFields(inputArgs[0]);
+                inputArgs[0] = logEntry.serialize();
             }
 
             return method.apply(this, inputArgs as any);
         }
     },
+
     serializers: {
         res(res) {
             const r = {
@@ -78,8 +65,18 @@ const pinoConf: pino.LoggerOptions = {
             }
 
             return r;
-        }
-    }
+        },
+        // req (request) {
+        //     return {
+        //         test: {
+        //             method: request.method,
+        //             url: request.url,
+        //             path: request.routerPath,
+        //             parameters: request.params,
+        //         }
+        //     };
+        // }
+    },
 };
 
 const plugin: IlcReportingPlugin = {
