@@ -23,7 +23,7 @@ export default abstract class PluginManager {
             }
 
             if (this.pluginsByType(plugin.type).length > 0) {
-                console.warn(`ILC plugins SDK: Plugin installed at path "${pluginPath}" of type "${plugin.type}" was ignored as it duplicates the existing one.`);
+                console.warn(`ILC plugins SDK: Multiple plugins installed at path "${pluginPath}" of type "${plugin.type}"`);
             }
 
             console.info(`ILC plugins SDK: Enabling plugin "${pluginPath}" of type "${plugin.type}"...`);
