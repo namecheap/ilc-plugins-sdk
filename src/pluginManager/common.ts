@@ -1,11 +1,10 @@
 import {
     Plugin,
-    Plugins,
     Context,
 } from './common.types';
 
 export default abstract class PluginManager {
-    protected plugins: Plugins = {};
+    protected plugins: Plugin[] = [];
 
     constructor(pluginTypes: Array<string>, ...contexts: Array<Context>) {
         this.init(pluginTypes, ...contexts);
@@ -23,17 +22,20 @@ export default abstract class PluginManager {
                 return;
             }
 
-            if (this.plugins[plugin.type] !== undefined) {
+            if (this.pluginsByType(plugin.type).length > 0) {
                 console.warn(`ILC plugins SDK: Plugin installed at path "${pluginPath}" of type "${plugin.type}" was ignored as it duplicates the existing one.`);
-                return;
             }
 
             console.info(`ILC plugins SDK: Enabling plugin "${pluginPath}" of type "${plugin.type}"...`);
-            this.plugins[plugin.type] = plugin;
+            this.plugins.push(plugin);
         }));
 
-        if (Object.keys(this.plugins).length === 0) {
+        if (this.plugins.length === 0) {
             console.info(`ILC plugins SDK: No plugins were detected.`);
         }
+    }
+
+    protected pluginsByType(type: string): Plugin[] {
+        return this.plugins.filter((plugin) => plugin.type === type);
     }
 };

@@ -11,9 +11,9 @@ import {
     I18nParamsDetectionPlugin,
 } from '../plugins/server.types';
 
-import reportingPlugin from '../plugins/reporting/server';
-import transitionHooksPlugin from '../plugins/transitionHooks/server';
-import i18nParamsDetectionPlugin from '../plugins/i18nParamsDetection/server';
+import defaultReportingPlugin from '../plugins/reporting/server';
+import defaultTransitionHooksPlugin from '../plugins/transitionHooks/server';
+import defaultI18nParamsDetectionPlugin from '../plugins/i18nParamsDetection/server';
 
 export default class PluginManager extends CommonPluginManager implements PluginManagerPublicApi {
     constructor(...contexts: Array<Context>) {
@@ -21,14 +21,17 @@ export default class PluginManager extends CommonPluginManager implements Plugin
     }
 
     getReportingPlugin() {
-        return this.plugins['reporting'] as IlcReportingPlugin || reportingPlugin;
+        const [reportingPlugin] = this.pluginsByType('reporting');
+        return reportingPlugin as IlcReportingPlugin || defaultReportingPlugin;
     }
 
     getTransitionHooksPlugin() {
-        return this.plugins['transitionHooks'] as TransitionHooksPlugin || transitionHooksPlugin;
+        const [transitionHooksPlugin] = this.pluginsByType('transitionHooks');
+        return transitionHooksPlugin as TransitionHooksPlugin || defaultTransitionHooksPlugin;
     }
 
     getI18nParamsDetectionPlugin() {
-        return this.plugins['i18nParamsDetection'] as I18nParamsDetectionPlugin || i18nParamsDetectionPlugin;
+        const [i18nParamsDetection] = this.pluginsByType('i18nParamsDetection');
+        return i18nParamsDetection as I18nParamsDetectionPlugin || defaultI18nParamsDetectionPlugin;
     }
 }

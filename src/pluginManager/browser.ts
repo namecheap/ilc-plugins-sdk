@@ -9,7 +9,7 @@ import {
     TransitionHooksPlugin,
 } from '../plugins/browser.types';
 
-import transitionHooksPlugin from '../plugins/transitionHooks/browser';
+import defaultTransitionHooksPlugin from '../plugins/transitionHooks/browser';
 
 export default class PluginManager extends CommonPluginManager implements PluginManagerPublicApi {
     constructor(...contexts: Array<Context>) {
@@ -17,6 +17,7 @@ export default class PluginManager extends CommonPluginManager implements Plugin
     }
 
     getTransitionHooksPlugin() {
-        return this.plugins['transitionHooks'] as TransitionHooksPlugin || transitionHooksPlugin;
+        const [transitionHooksPlugin] = this.pluginsByType('transitionHooks');
+        return transitionHooksPlugin as TransitionHooksPlugin || defaultTransitionHooksPlugin;
     }
 }
