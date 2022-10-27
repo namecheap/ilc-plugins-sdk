@@ -49,7 +49,7 @@ type IlcSettings = {
     [key: string]: IlcSetting;
 }
 
-type IlcSharedLibConfig = PlainObject;
+type IlcSharedLibConfig = string;
 
 interface IlcSharedLibsConfig {
     [key: string]: IlcSharedLibConfig;
