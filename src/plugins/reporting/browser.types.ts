@@ -10,19 +10,19 @@ export interface IlcError extends Error {
     data: PlainObject;
 }
 
-export type LogInfo = PlainObject | IlcError | Error;
+export declare type IlcLogInfo = PlainObject | IlcError | Error;
 
-export interface Logger {
-    warn(msg: string, logInfo?: LogInfo): void;
-    info(msg: string, logInfo?: LogInfo): void;
-    debug(msg: string, logInfo?: LogInfo): void;
-    trace(msg: string, logInfo?: LogInfo): void;
-    fatal(msg: string, logInfo?: LogInfo): void;
-    error(msg: string, logInfo?: LogInfo): void;
+export declare interface IlcLogger {
+    warn(msg: string, logInfo?: IlcLogInfo): void;
+    info(msg: string, logInfo?: IlcLogInfo): void;
+    debug(msg: string, logInfo?: IlcLogInfo): void;
+    trace(msg: string, logInfo?: IlcLogInfo): void;
+    fatal(msg: string, logInfo?: IlcLogInfo): void;
+    error(msg: string, logInfo?: IlcLogInfo): void;
 }
 
-export declare interface ReportingPlugin extends Plugin {
+export declare interface IlcReportingPlugin extends Plugin {
     type: 'reporting';
-    logger: Logger;
+    logger: IlcLogger;
     setConfig: (config: IlcConfig) => void;
 }

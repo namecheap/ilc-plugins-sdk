@@ -1,19 +1,19 @@
-import { ReportingPlugin, LogInfo, IlcError } from "./browser.types";
+import { IlcReportingPlugin, IlcLogInfo, IlcError } from './browser.types';
 
 type ConsoleLogMethods = keyof Pick<Console, 'error' | 'warn' | 'info' | 'debug' | 'trace' | 'log'>;
 
-function isIlcError(error: LogInfo): error is IlcError {
+function isIlcError(error: IlcLogInfo): error is IlcError {
     const maybeIlcError = error as IlcError;
     return maybeIlcError.errorId !== undefined && maybeIlcError.code !== undefined;
 }
 
-function isError(error: LogInfo): error is Error {
+function isError(error: IlcLogInfo): error is Error {
     const maybeError = error as Error;
     return maybeError.name !== undefined && maybeError.message !== undefined;
 }
 
 function logMethod(methodName: ConsoleLogMethods) {
-    return (...args: [string, LogInfo]) => {
+    return (...args: [string, IlcLogInfo]) => {
         const [msg, logInfo] = args;
         const errorInfo = {};
        
@@ -45,7 +45,7 @@ function logMethod(methodName: ConsoleLogMethods) {
     };
 }
 
-export const consoleReportingPlugin: ReportingPlugin = {
+export const consoleReportingPlugin: IlcReportingPlugin = {
     type: 'reporting',
     logger: {
         warn: logMethod('warn'),
@@ -58,7 +58,7 @@ export const consoleReportingPlugin: ReportingPlugin = {
     setConfig() {},
 };
 
-export const reportingPluginsWrapper = (reporters: ReportingPlugin[]): ReportingPlugin => {
+export const reportingPluginsWrapper = (reporters: IlcReportingPlugin[]): IlcReportingPlugin => {
     return  {
         type: 'reporting',
         logger: {

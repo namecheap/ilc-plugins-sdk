@@ -6,7 +6,7 @@ type PlainObjectValue =
   | PlainObject
   | PlainObjectArray;
 
-export interface PlainObject {
+export declare interface PlainObject {
   [key: string]: PlainObjectValue;
 }
 
@@ -55,7 +55,7 @@ interface IlcSharedLibsConfig {
     [key: string]: IlcSharedLibConfig;
 }
 
-export interface IlcRegistryConfig {
+export declare interface IlcRegistryConfig {
     apps: IlcRegistryAppsConfig,
     routes: IlcRouteConfig[];
     specialRoutes: {
@@ -65,7 +65,7 @@ export interface IlcRegistryConfig {
     sharedLibs: IlcSharedLibsConfig;
 }
 
-export interface IlcConfig {
+export declare interface IlcConfig {
     getConfig(): IlcRegistryConfig;
     getConfigForApps(): IlcRegistryAppsConfig;
     getSettings(): IlcSettings;

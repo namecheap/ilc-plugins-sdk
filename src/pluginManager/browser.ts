@@ -10,7 +10,7 @@ import {
 } from '../plugins/browser.types';
 
 import {
-    ReportingPlugin,
+    IlcReportingPlugin,
 } from '../plugins/reporting/browser.types';
 
 import { consoleReportingPlugin, reportingPluginsWrapper } from '../plugins/reporting/browser';
@@ -21,8 +21,8 @@ export default class PluginManager extends CommonPluginManager implements Plugin
         super(['transitionHooks', 'reporting'], ...contexts);
     }
 
-    getReportingPlugin(): ReportingPlugin {
-        const reporters = this.pluginsByType('reporting') as ReportingPlugin[];
+    getReportingPlugin(): IlcReportingPlugin {
+        const reporters = this.pluginsByType('reporting') as IlcReportingPlugin[];
         return reporters.length > 0 ? reportingPluginsWrapper(reporters.concat(consoleReportingPlugin)) : consoleReportingPlugin;
     }
 

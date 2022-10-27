@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import Sinon, { createSandbox, SinonSandbox, SinonStub, stub } from 'sinon';
-import { Logger, ReportingPlugin } from './browser.types';
+import { createSandbox, SinonSandbox, SinonStub, stub } from 'sinon';
+import { IlcLogger, IlcReportingPlugin } from './browser.types';
 import { consoleReportingPlugin, reportingPluginsWrapper } from './browser';
 
 describe('Reporting browser', () => {
@@ -17,7 +17,7 @@ describe('Reporting browser', () => {
             let debugStub: SinonStub;
             let traceStub: SinonStub;
 
-            let logger: Logger;
+            let logger: IlcLogger;
 
             beforeEach(() => {
                 logger = consoleReportingPlugin.logger;
@@ -220,9 +220,9 @@ describe('Reporting browser', () => {
     });
 
     describe('Reporting plugins wrapper', () => {
-        let firstStubReporter: ReportingPlugin;
-        let secondStubReporter: ReportingPlugin;
-        let wrappedReporingPlugin: ReportingPlugin;
+        let firstStubReporter: IlcReportingPlugin;
+        let secondStubReporter: IlcReportingPlugin;
+        let wrappedReporingPlugin: IlcReportingPlugin;
         
         const logObject = {
             hot: 'cake'
@@ -288,8 +288,8 @@ describe('Reporting browser', () => {
             expect((secondStubReporter.setConfig as SinonStub).calledWithExactly(ilcConfig)).to.be.true;
         });
 
-        const methods: (keyof Logger)[] = ['warn', 'info', 'debug', 'trace', 'fatal', 'error'];
-        methods.forEach((methodName: keyof Logger) => {
+        const methods: (keyof IlcLogger)[] = ['warn', 'info', 'debug', 'trace', 'fatal', 'error'];
+        methods.forEach((methodName: keyof IlcLogger) => {
             it(`should call method on every wrapped reporter logger when logger.${methodName} invoked`, () => {
                 wrappedReporingPlugin.logger[methodName](`${methodName} message`);
                 wrappedReporingPlugin.logger[methodName](`${methodName} message`, logObject);
