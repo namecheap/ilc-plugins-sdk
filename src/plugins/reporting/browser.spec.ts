@@ -276,6 +276,7 @@ describe('Reporting browser', () => {
             const ilcConfig = {
                 getConfig: stub(),
                 getConfigForApps: stub(),
+                getConfigForAppByName: stub(),
                 getSettings: stub(),
                 getSettingsByKey: stub(),
                 getConfigForSharedLibs: stub(),
