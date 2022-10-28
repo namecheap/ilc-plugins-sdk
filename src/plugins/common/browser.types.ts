@@ -68,9 +68,9 @@ export declare interface IlcRegistryConfig {
 export declare interface IlcConfig {
     getConfig(): IlcRegistryConfig;
     getConfigForApps(): IlcRegistryAppsConfig;
-    getConfigForAppByName(name: string): IlcRegistryAppConfig;
+    getConfigForAppByName(name: string): IlcRegistryAppConfig | undefined;
     getSettings(): IlcSettings;
-    getSettingsByKey(key: string): IlcSetting;
+    getSettingsByKey(key: string): IlcSetting | undefined;
     getConfigForSharedLibs(): IlcSharedLibsConfig;
-    getConfigForSharedLibsByName(name: string): IlcSharedLibConfig;
+    getConfigForSharedLibsByName(name: string): IlcSharedLibConfig | undefined;
 }
