@@ -1,5 +1,7 @@
 import CommonPluginManager from './common';
 
+import { Plugin } from './common.types';
+
 import {
     Context,
     PluginManagerPublicApi,
@@ -21,13 +23,19 @@ export default class PluginManager extends CommonPluginManager implements Plugin
         super(['transitionHooks', 'reporting'], ...contexts);
     }
 
-    getReportingPlugin(): IlcReportingPlugin {
-        const reporters = this.pluginsByType('reporting') as IlcReportingPlugin[];
+    public getReportingPlugin(): IlcReportingPlugin {
+        const reporters = this.pluginsByType('reporting');
         return reporters.length > 0 ? reportingPluginsWrapper(reporters.concat(consoleReportingPlugin)) : consoleReportingPlugin;
     }
 
-    getTransitionHooksPlugin() {
+    public getTransitionHooksPlugin() {
         const [transitionHooksPlugin] = this.pluginsByType('transitionHooks');
-        return transitionHooksPlugin as TransitionHooksPlugin || defaultTransitionHooksPlugin;
+        return transitionHooksPlugin || defaultTransitionHooksPlugin;
+    }
+
+    protected pluginsByType(term: 'reporting'): IlcReportingPlugin[];
+    protected pluginsByType(term: 'transitionHooks'): TransitionHooksPlugin[];
+    protected pluginsByType(type: string): Plugin[] {
+        return super.pluginsByType(type);
     }
 }
