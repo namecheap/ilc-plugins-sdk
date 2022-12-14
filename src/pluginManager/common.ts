@@ -18,15 +18,15 @@ export default abstract class PluginManager {
             const plugin: Plugin = module.default || module;
 
             if (!pluginTypes.includes(plugin.type)) {
-                console.warn(`ILC plugins SDK: Plugin installed at path "${pluginPath}" of type "${plugin.type}" was ignored as it declares unsupported type.`);
+                console.warn(`ILC plugins SDK: Unsupported type "${plugin.type}" plugin was ignored.`);
                 return;
             }
 
             if (this.pluginsByType(plugin.type).length > 0) {
-                console.warn(`ILC plugins SDK: Multiple plugins installed at path "${pluginPath}" of type "${plugin.type}"`);
+                console.warn(`ILC plugins SDK: Multiple plugins of type "${plugin.type}" installed.`);
             }
 
-            console.info(`ILC plugins SDK: Enabling plugin "${pluginPath}" of type "${plugin.type}"...`);
+            console.info(`ILC plugins SDK: Enabling "${plugin.type}" plugin ...`);
             this.plugins.push(plugin);
         }));
 
