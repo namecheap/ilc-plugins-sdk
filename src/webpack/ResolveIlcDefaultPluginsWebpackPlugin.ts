@@ -1,10 +1,12 @@
 import path from 'path';
-import fg from 'fast-glob';
+import { ilcPluginsPath } from './ilcPluginsPath';
 
 // TODO: cover the following code with Typescript types
 export default class ResolveIlcDefaultPluginsWebpackPlugin {
     private source = 'resolve';
     private target = 'parsed-resolve';
+
+    constructor(private readonly pluginsPath?: string) {}
 
     apply(resolver: any) {
         const target = resolver.ensureHook(this.target);
@@ -17,13 +19,7 @@ export default class ResolveIlcDefaultPluginsWebpackPlugin {
                 nextRequest.path.endsWith('ilc-plugins-sdk/dist/pluginManager') &&
                 nextRequest.context.issuer.endsWith('ilc-plugins-sdk/dist/pluginManager/browser.js')
             ) {
-                const pluginPaths = fg.sync(
-                    ['ilc-plugin-*/browser.js', '@*/ilc-plugin-*/browser.js'],
-                    {
-                        cwd: path.resolve(__dirname, '../../../../node_modules'),
-                        absolute: true,
-                    }
-                );
+                const pluginPaths = ilcPluginsPath(this.pluginsPath || path.resolve(__dirname, '../../../../node_modules'));
 
                 for (const pluginPath of pluginPaths) {
                     const module = require(pluginPath);

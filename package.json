@@ -1,6 +1,6 @@
 {
   "name": "ilc-plugins-sdk",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "This package provides interfaces & base classes for ILC plugins developers",
   "main": "dist/server.js",
   "types": "dist/server.d.ts",
