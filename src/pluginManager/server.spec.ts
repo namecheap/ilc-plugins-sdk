@@ -5,6 +5,9 @@ import {
     PluginManagerPublicApi,
 } from './server.types';
 
+
+import { Plugin } from './common.types';
+
 import PluginManager from './server';
 
 describe('Typescript usage suite', () => {
@@ -23,6 +26,12 @@ describe('PluginManager', () => {
             method: () => {},
         };
 
+        const cloneOfReporting = {
+            type: 'reporting',
+            property: 'propertyOfCloneOfReportingPlugin',
+            method: () => {},
+        };
+
         const i18nParamsDetectionPlugin = {
             type: 'i18nParamsDetection',
             property: 'propertyOfI18nParamsDetectionPlugin',
@@ -30,11 +39,15 @@ describe('PluginManager', () => {
         };
 
         const transitionHooksPlugin = {
-            default: {
-                type: 'transitionHooks',
-                property: 'propertyOfTransitionHooksPlugin',
-                method: () => {},
-            },
+            type: 'transitionHooks',
+            property: 'propertyOfTransitionHooksPlugin',
+            method: () => {},
+        };
+
+        const nonExistentType = {
+            type: 'nonExistentType',
+            property: 'propertyOfPluginWithNonExistentType',
+            method: () => {},
         };
 
         const enum PluginPaths {
@@ -48,67 +61,108 @@ describe('PluginManager', () => {
         const plugins = {
             [PluginPaths.reporting]: reportingPlugin,
             [PluginPaths.i18nParamsDetection]: i18nParamsDetectionPlugin,
-            [PluginPaths.transitionHooks]: transitionHooksPlugin,
-            [PluginPaths.cloneOfReporting]: {
-                type: 'reporting',
-                property: 'propertyOfCloneOfReportingPlugin',
-                method: () => {},
-            },
-            [PluginPaths.nonExistentType]: {
-                type: 'nonExistentType',
-                property: 'propertyOfPluginWithNonExistentType',
-                method: () => {},
-            },
+            [PluginPaths.transitionHooks]: { default: transitionHooksPlugin },
+            [PluginPaths.cloneOfReporting]: cloneOfReporting,
+            [PluginPaths.nonExistentType]: nonExistentType,
         };
 
-        function context(pluginPath: PluginPaths) {
-            return plugins[pluginPath];
-        }
+        const pluginsList: Plugin[] = [
+            reportingPlugin,
+            i18nParamsDetectionPlugin,
+            transitionHooksPlugin,
+            cloneOfReporting,
+            nonExistentType,
+        ];
 
-        context.keys = function () {
-            return Object.keys(plugins);
-        };
+        describe('from context', () => {
+            function context(pluginPath: PluginPaths) {
+                return plugins[pluginPath];
+            }
 
-        beforeEach(() => {
-            pluginManager = new PluginManager(context);
+            context.keys = function () {
+                return Object.keys(plugins);
+            };
+
+            beforeEach(() => {
+                pluginManager = new PluginManager(context);
+            });
+
+            it('should return reporting plugin', () => {
+                chai.expect(pluginManager.getReportingPlugin()).to.be.equals(reportingPlugin);
+            });
+
+            it('should return i18n params detection plugin', () => {
+                chai.expect(pluginManager.getI18nParamsDetectionPlugin()).to.be.equals(i18nParamsDetectionPlugin);
+            });
+
+            it('should return transition hooks plugin', () => {
+                chai.expect(pluginManager.getTransitionHooksPlugin()).to.be.equals(transitionHooksPlugin);
+            });
         });
 
-        it('should return reporting plugin', () => {
-            chai.expect(pluginManager.getReportingPlugin()).to.be.equals(reportingPlugin);
-        });
+        describe('from plugins', () => {
+            beforeEach(() => {
+                pluginManager = new PluginManager(...pluginsList);
+            });
 
-        it('should return i18n params detection plugin', () => {
-            chai.expect(pluginManager.getI18nParamsDetectionPlugin()).to.be.equals(i18nParamsDetectionPlugin);
-        });
+            it('should return reporting plugin', () => {
+                chai.expect(pluginManager.getReportingPlugin()).to.be.equals(reportingPlugin);
+            });
 
-        it('should return transition hooks plugin', () => {
-            chai.expect(pluginManager.getTransitionHooksPlugin()).to.be.equals(transitionHooksPlugin.default);
+            it('should return i18n params detection plugin', () => {
+                chai.expect(pluginManager.getI18nParamsDetectionPlugin()).to.be.equals(i18nParamsDetectionPlugin);
+            });
+
+            it('should return transition hooks plugin', () => {
+                chai.expect(pluginManager.getTransitionHooksPlugin()).to.be.equals(transitionHooksPlugin);
+            });
         });
     });
 
     describe('when trying to get a plugin that is non existent', () => {
-        function context() {
-            return;
-        }
 
-        context.keys = function () {
-            return [];
-        };
+        describe('from context', () => {
+            function context() {
+                return;
+            }
 
-        beforeEach(() => {
-            pluginManager = new PluginManager(context);
+            context.keys = function () {
+                return [];
+            };
+
+            beforeEach(() => {
+                pluginManager = new PluginManager(context);
+            });
+
+            it('should return null while getting reporting plugin', () => {
+                chai.expect(pluginManager.getReportingPlugin()).to.be.eql(require('../plugins/reporting/server').default);
+            });
+
+            it('should return null while getting i18n params detection plugin', () => {
+                chai.expect(pluginManager.getI18nParamsDetectionPlugin()).to.be.eql(require('../plugins/i18nParamsDetection/server').default);
+            });
+
+            it('should return null while getting transition hooks plugin', () => {
+                chai.expect(pluginManager.getTransitionHooksPlugin()).to.be.eql(require('../plugins/transitionHooks/server').default);
+            });
         });
 
-        it('should return null while getting reporting plugin', () => {
-            chai.expect(pluginManager.getReportingPlugin()).to.be.eql(require('../plugins/reporting/server').default);
-        });
+        describe('from plugins', () => {
+            beforeEach(() => {
+                pluginManager = new PluginManager(...[] as Plugin[]);
+            });
 
-        it('should return null while getting i18n params detection plugin', () => {
-            chai.expect(pluginManager.getI18nParamsDetectionPlugin()).to.be.eql(require('../plugins/i18nParamsDetection/server').default);
-        });
+            it('should return null while getting reporting plugin', () => {
+                chai.expect(pluginManager.getReportingPlugin()).to.be.eql(require('../plugins/reporting/server').default);
+            });
 
-        it('should return null while getting transition hooks plugin', () => {
-            chai.expect(pluginManager.getTransitionHooksPlugin()).to.be.eql(require('../plugins/transitionHooks/server').default);
+            it('should return null while getting i18n params detection plugin', () => {
+                chai.expect(pluginManager.getI18nParamsDetectionPlugin()).to.be.eql(require('../plugins/i18nParamsDetection/server').default);
+            });
+
+            it('should return null while getting transition hooks plugin', () => {
+                chai.expect(pluginManager.getTransitionHooksPlugin()).to.be.eql(require('../plugins/transitionHooks/server').default);
+            });
         });
     });
 });

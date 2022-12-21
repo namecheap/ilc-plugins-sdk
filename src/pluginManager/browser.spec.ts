@@ -6,6 +6,8 @@ import {
     PluginManagerPublicApi,
 } from './browser.types';
 
+import { Plugin } from './common.types';
+
 import PluginManager from './browser';
 
 import * as reporting from '../plugins/reporting/browser';
@@ -25,27 +27,33 @@ describe('PluginManager', () => {
         let reportingPluginsWrapperStub: SinonStub;
      
         const transitionHooksPlugin = {
-            default: {
-                type: 'transitionHooks',
-                property: 'propertyOfTransitionHooksPlugin',
-                getTransitionHooks: () => {},
-            },
+            type: 'transitionHooks',
+            property: 'propertyOfTransitionHooksPlugin',
+            getTransitionHooks: () => {},
+        };
+
+        const cloneOfTransitionHooks = {
+            type: 'transitionHooks',
+            property: 'propertyOfCloneOfTransitionHooksPlugin',
+            getTransitionHooks: () => {},
         };
 
         const reportingPlugin = {
-            default: {
-                type: 'reporting',
-                logger: {},
-                setConfig: () => {},
-            },
+            type: 'reporting',
+            logger: {},
+            setConfig: () => {},
         };
 
         const reportingSecondPlugin = {
-            default: {
-                type: 'reporting',
-                logger: {},
-                setConfig: () => {},
-            },
+            type: 'reporting',
+            logger: {},
+            setConfig: () => {},
+        };
+
+        const nonExistentTypePlugin = {
+            type: 'nonExistentType',
+            property: 'propertyOfPluginWithNonExistentType',
+            method: () => {},
         };
 
         const enum PluginPaths {
@@ -57,28 +65,20 @@ describe('PluginManager', () => {
         }
 
         const plugins = {
-            [PluginPaths.reporting]: reportingPlugin,
-            [PluginPaths.reportingSecond]: reportingSecondPlugin,
-            [PluginPaths.transitionHooks]: transitionHooksPlugin,
-            [PluginPaths.cloneOfTransitionHooks]: {
-                type: 'transitionHooks',
-                property: 'propertyOfCloneOfTransitionHooksPlugin',
-                getTransitionHooks: () => {},
-            },
-            [PluginPaths.nonExistentType]: {
-                type: 'nonExistentType',
-                property: 'propertyOfPluginWithNonExistentType',
-                method: () => {},
-            },
+            [PluginPaths.reporting]: { default: reportingPlugin },
+            [PluginPaths.reportingSecond]: { default: reportingSecondPlugin },
+            [PluginPaths.transitionHooks]: { default: transitionHooksPlugin },
+            [PluginPaths.cloneOfTransitionHooks]: cloneOfTransitionHooks,
+            [PluginPaths.nonExistentType]: nonExistentTypePlugin,
         };
 
-        function context(pluginPath: PluginPaths) {
-            return plugins[pluginPath];
-        }
-
-        context.keys = function () {
-            return Object.keys(plugins);
-        };
+        const pluginsList: Plugin[] = [
+            reportingPlugin,
+            reportingSecondPlugin,
+            transitionHooksPlugin,
+            cloneOfTransitionHooks,
+            nonExistentTypePlugin,
+        ];
 
         beforeEach(() => {
             sandbox = createSandbox();
@@ -87,50 +87,102 @@ describe('PluginManager', () => {
 
             reportingPluginsWrapperStub = sandbox.stub(reporting, 'reportingPluginsWrapper');
             reportingPluginsWrapperStub.returns(wrappedReportingPlugin);
-
-            pluginManager = new PluginManager(context);
         });
 
         afterEach(() => sandbox.restore());
 
-        it('should return transition hooks plugin', () => {
-            expect(pluginManager.getTransitionHooksPlugin()).to.be.equals(transitionHooksPlugin.default);
+        describe('from context', () => {
+            function context(pluginPath: PluginPaths) {
+                return plugins[pluginPath];
+            }
+
+            context.keys = function () {
+                return Object.keys(plugins);
+            };
+
+            beforeEach(() => {
+                pluginManager = new PluginManager(context);
+            });
+
+            it('should return transition hooks plugin', () => {
+                expect(pluginManager.getTransitionHooksPlugin()).to.be.equals(transitionHooksPlugin);
+            });
+
+            it('should return reporting wrapper plugin', () => {
+                expect(pluginManager.getReportingPlugin()).to.be.equals(wrappedReportingPlugin);
+            });
+
+            it('should wrap reporting plugins and default console plugin with reportingPluginsWrapper', () => {
+                pluginManager.getReportingPlugin();
+
+                expect(reportingPluginsWrapperStub.calledOnceWithExactly([
+                    reportingPlugin,
+                    reportingSecondPlugin,
+                    reporting.consoleReportingPlugin,
+                ])).to.be.true;
+            });
         });
 
-        it('should return reporting wrapper plugin', () => {
-            expect(pluginManager.getReportingPlugin()).to.be.equals(wrappedReportingPlugin);
-        });
+        describe('from plugins', () => {
+            beforeEach(() => {
+                pluginManager = new PluginManager(...pluginsList);
+            });
 
-        it('should wrap reporting plugins and default console plugin with reportingPluginsWrapper', () => {
-            pluginManager.getReportingPlugin();
+            it('should return transition hooks plugin', () => {
+                expect(pluginManager.getTransitionHooksPlugin()).to.be.equals(transitionHooksPlugin);
+            });
 
-            expect(reportingPluginsWrapperStub.calledOnceWithExactly([
-                reportingPlugin.default, 
-                reportingSecondPlugin.default, 
-                reporting.consoleReportingPlugin,
-            ])).to.be.true;
+            it('should return reporting wrapper plugin', () => {
+                expect(pluginManager.getReportingPlugin()).to.be.equals(wrappedReportingPlugin);
+            });
+
+            it('should wrap reporting plugins and default console plugin with reportingPluginsWrapper', () => {
+                pluginManager.getReportingPlugin();
+
+                expect(reportingPluginsWrapperStub.calledOnceWithExactly([
+                    reportingPlugin,
+                    reportingSecondPlugin,
+                    reporting.consoleReportingPlugin,
+                ])).to.be.true;
+            });
         });
     });
 
     describe('when trying to get a plugin that is non existent', () => {
-        function context() {
-            return;
-        }
+        describe('from context', () => {
+            function context() {
+                return;
+            }
 
-        context.keys = function () {
-            return [];
-        };
+            context.keys = function () {
+                return [];
+            };
 
-        beforeEach(() => {
-            pluginManager = new PluginManager(context);
+            beforeEach(() => {
+                pluginManager = new PluginManager(context);
+            });
+
+            it('should return null while getting transition hooks plugin', () => {
+                expect(pluginManager.getTransitionHooksPlugin()).to.be.eql(require('../plugins/transitionHooks/browser').default);
+            });
+
+            it('should return reporting consoleReporting plugin', () => {
+                expect(pluginManager.getReportingPlugin()).to.be.equals(reporting.consoleReportingPlugin);
+            });
         });
 
-        it('should return null while getting transition hooks plugin', () => {
-            expect(pluginManager.getTransitionHooksPlugin()).to.be.eql(require('../plugins/transitionHooks/browser').default);
-        });
+        describe('from plugins', () => {
+            beforeEach(() => {
+                pluginManager = new PluginManager(...[] as Plugin[]);
+            });
 
-        it('should return reporting consoleReporting plugin', () => {
-            expect(pluginManager.getReportingPlugin()).to.be.equals(reporting.consoleReportingPlugin);
+            it('should return null while getting transition hooks plugin', () => {
+                expect(pluginManager.getTransitionHooksPlugin()).to.be.eql(require('../plugins/transitionHooks/browser').default);
+            });
+
+            it('should return reporting consoleReporting plugin', () => {
+                expect(pluginManager.getReportingPlugin()).to.be.equals(reporting.consoleReportingPlugin);
+            });
         });
     });
 });

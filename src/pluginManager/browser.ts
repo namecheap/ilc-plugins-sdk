@@ -19,8 +19,13 @@ import { consoleReportingPlugin, reportingPluginsWrapper } from '../plugins/repo
 import defaultTransitionHooksPlugin from '../plugins/transitionHooks/browser';
 
 export default class PluginManager extends CommonPluginManager implements PluginManagerPublicApi {
-    constructor(...contexts: Array<Context>) {
-        super(['transitionHooks', 'reporting'], ...contexts);
+    /**
+     * @deprecated use: new PluginManager(...plugins: Plugins[]) instead
+     */
+    constructor(...plugins: Context[]);
+    constructor(...plugins: Plugin[]);
+    constructor(...plugins: Plugin[] | Context[]) {
+        super(['transitionHooks', 'reporting'], ...plugins);
     }
 
     public getReportingPlugin(): IlcReportingPlugin {
