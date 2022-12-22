@@ -1,7 +1,7 @@
 import CommonPluginManager from './common';
+import { Context, Plugin } from './common.types';
 
 import {
-    Context,
     PluginManagerPublicApi,
 } from './server.types';
 
@@ -16,8 +16,13 @@ import defaultTransitionHooksPlugin from '../plugins/transitionHooks/server';
 import defaultI18nParamsDetectionPlugin from '../plugins/i18nParamsDetection/server';
 
 export default class PluginManager extends CommonPluginManager implements PluginManagerPublicApi {
-    constructor(...contexts: Array<Context>) {
-        super(['reporting', 'transitionHooks', 'i18nParamsDetection'], ...contexts);
+    /**
+     * @deprecated use: new PluginManager(...plugins: Plugins[]) instead
+     */
+    constructor(...plugins: Context[]);
+    constructor(...plugins: Plugin[]);
+    constructor(...plugins: Context[] | Plugin[]) {
+        super(['reporting', 'transitionHooks', 'i18nParamsDetection'], ...plugins);
     }
 
     getReportingPlugin() {
