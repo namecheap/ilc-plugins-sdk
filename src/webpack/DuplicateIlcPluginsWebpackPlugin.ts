@@ -1,18 +1,19 @@
 import path from 'path';
 import { ilcPluginsPath } from './ilcPluginsPath';
+import { WebpackError, type Compiler, type WebpackPluginInstance } from 'webpack';
 
-function createDuplicateError(message: string): Error {
-    const error = new Error(message);
+function createDuplicateError(message: string): WebpackError {
+    const error = new WebpackError(message);
     error.name = 'DuplicateIlcPluginsWebpackPlugin';
 
     return error;
 }
 
-export class DuplicateIlcPluginsWebpackPlugin {
+export class DuplicateIlcPluginsWebpackPlugin implements WebpackPluginInstance {
     constructor(private readonly pluginsPath?: string) {}
 
-	apply(compiler: any) {
-        compiler.hooks.thisCompilation.tap('DuplicateIlcPluginsWebpackPlugin', (compilation: any) => {
+	apply(compiler: Compiler) {
+        compiler.hooks.thisCompilation.tap('DuplicateIlcPluginsWebpackPlugin', (compilation) => {
             const pluginPaths = ilcPluginsPath(this.pluginsPath || path.resolve(__dirname, '../../../../node_modules'));
             const pluginTypeCount: Record<string, number> = {};
 

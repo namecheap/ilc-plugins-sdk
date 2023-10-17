@@ -29,23 +29,23 @@
   },
   "homepage": "https://github.com/namecheap/ilc-plugins-sdk#readme",
   "devDependencies": {
-    "@types/chai": "^4.2.15",
-    "@types/mocha": "^8.2.0",
-    "@types/node": "^14.6.0",
-    "@types/sinon": "^9.0.10",
-    "chai": "^4.3.0",
+    "@types/chai": "^4.3.8",
+    "@types/mocha": "^10.0.2",
+    "@types/node": "^20.8.6",
+    "@types/sinon": "^10.0.19",
+    "chai": "^4.3.10",
     "cross-env": "^7.0.3",
-    "mocha": "^8.3.0",
+    "mocha": "^10.2.0",
     "nyc": "^15.1.0",
-    "sinon": "^9.2.4",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.0.2"
+    "sinon": "^16.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
+    "webpack": "^5.89.0"
   },
   "dependencies": {
-    "@types/pino": "^6.3.5",
-    "fast-glob": "^3.2.5",
+    "fast-glob": "^3.3.1",
     "http-headers": "^3.0.2",
-    "hyperid": "^2.1.0",
-    "pino": "^6.11.1"
+    "hyperid": "^3.1.1",
+    "pino": "^8.16.0"
   }
 }
