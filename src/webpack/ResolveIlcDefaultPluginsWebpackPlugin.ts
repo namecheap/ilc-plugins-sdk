@@ -1,22 +1,26 @@
 import path from 'path';
 import { ilcPluginsPath } from './ilcPluginsPath';
+import type { Resolver, ResolvePluginInstance } from 'webpack';
 
-// TODO: cover the following code with Typescript types
-export default class ResolveIlcDefaultPluginsWebpackPlugin {
+export default class ResolveIlcDefaultPluginsWebpackPlugin implements ResolvePluginInstance {
     private source = 'resolve';
     private target = 'parsed-resolve';
 
     constructor(private readonly pluginsPath?: string) {}
 
-    apply(resolver: any) {
+    apply(resolver: Resolver) {
         const target = resolver.ensureHook(this.target);
 
-        resolver.getHook(this.source).tapAsync('ResolveIlcDefaultPluginsWebpackPlugin', (request: any, resolveContext: any, callback: any) => {
+        resolver.getHook(this.source).tapAsync('ResolveIlcDefaultPluginsWebpackPlugin', (request, resolveContext, callback) => {
             let nextRequest = request;
 
             if (
-                nextRequest.request.endsWith('plugins/transitionHooks/browser') &&
+                nextRequest.request?.endsWith('plugins/transitionHooks/browser') &&
+                nextRequest.path &&
                 nextRequest.path.endsWith('ilc-plugins-sdk/dist/pluginManager') &&
+                nextRequest.context &&
+                'issuer' in nextRequest.context &&
+                typeof nextRequest.context.issuer === 'string' &&
                 nextRequest.context.issuer.endsWith('ilc-plugins-sdk/dist/pluginManager/browser.js')
             ) {
                 const pluginPaths = ilcPluginsPath(this.pluginsPath || path.resolve(__dirname, '../../../../node_modules'));

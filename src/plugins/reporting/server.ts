@@ -16,7 +16,7 @@ const pinoConf: pino.LoggerOptions = {
     level: 'info',
     // nestedKey: 'payload', TODO: blocked by https://github.com/pinojs/pino/issues/883
     hooks: {
-        logMethod(inputArgs, method) {
+        logMethod(inputArgs: any[], method) {
             if (inputArgs[0] instanceof Error) {
                 const err = inputArgs[0] as IlcError;
 
@@ -58,7 +58,7 @@ const pinoConf: pino.LoggerOptions = {
                 inputArgs[0] = logObj;
             }
 
-            return method.apply(this, inputArgs as any);
+            return method.apply(this, inputArgs as Parameters<pino.LogFn>);
         }
     },
     serializers: {
