@@ -18,6 +18,10 @@ export interface I18n {
         cleanUrl: string;
     };
     getCanonicalLocale(locale: string): string | null;
+    getSupportedLocales(): Promise<string[]>;
+    getDefaultLocale(): Promise<string>;
+    getSupportedCurrencies(): Promise<string[]>;
+    getDefaultCurrency(): Promise<string>;
 }
 
 export declare interface I18nParamsDetectionPlugin extends Plugin {
