@@ -64,4 +64,4 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release --dry-run
+        run: npx semantic-release
