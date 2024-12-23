@@ -4,6 +4,7 @@ export interface Route {
         [key: string]: any;
     };
     hostname: string;
+    route: string;
 }
 
 export interface TransitionContinue {
