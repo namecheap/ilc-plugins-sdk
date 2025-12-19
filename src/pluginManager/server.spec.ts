@@ -50,13 +50,13 @@ describe('PluginManager', () => {
             method: () => {},
         };
 
-        const enum PluginPaths {
-            reporting = 'node_modules/@test/ilc-plugin-reporting',
-            i18nParamsDetection = 'node_modules/@test/ilc-plugin-i18n-params-detection',
-            transitionHooks = 'node_modules/@test/ilc-plugin-transition-hooks',
-            cloneOfReporting = 'node_modules/@test/ilc-plugin-that-is-clone-of-reporting-plugin',
-            nonExistentType = 'node_modules/@test/ilc-plugin-with-non-existent-type',
-        }
+        const PluginPaths = {
+            reporting: 'node_modules/@test/ilc-plugin-reporting',
+            i18nParamsDetection: 'node_modules/@test/ilc-plugin-i18n-params-detection',
+            transitionHooks: 'node_modules/@test/ilc-plugin-transition-hooks',
+            cloneOfReporting: 'node_modules/@test/ilc-plugin-that-is-clone-of-reporting-plugin',
+            nonExistentType: 'node_modules/@test/ilc-plugin-with-non-existent-type',
+        } as const;
 
         const plugins = {
             [PluginPaths.reporting]: reportingPlugin,
@@ -75,7 +75,7 @@ describe('PluginManager', () => {
         ];
 
         describe('from context', () => {
-            function context(pluginPath: PluginPaths) {
+            function context(pluginPath: typeof PluginPaths[keyof typeof PluginPaths]) {
                 return plugins[pluginPath];
             }
 
@@ -135,7 +135,7 @@ describe('PluginManager', () => {
             });
 
             it('should return null while getting reporting plugin', () => {
-                chai.expect(pluginManager.getReportingPlugin()).to.be.eql(require('../plugins/reporting/server').default);
+                chai.expect(pluginManager.getReportingPlugin()).to.be.eql(require('../plugins/reporting/server').plugin);
             });
 
             it('should return null while getting i18n params detection plugin', () => {
@@ -153,7 +153,7 @@ describe('PluginManager', () => {
             });
 
             it('should return null while getting reporting plugin', () => {
-                chai.expect(pluginManager.getReportingPlugin()).to.be.eql(require('../plugins/reporting/server').default);
+                chai.expect(pluginManager.getReportingPlugin()).to.be.eql(require('../plugins/reporting/server').plugin);
             });
 
             it('should return null while getting i18n params detection plugin', () => {

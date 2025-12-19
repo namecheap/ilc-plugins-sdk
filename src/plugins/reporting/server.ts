@@ -93,4 +93,4 @@ const plugin: IlcReportingPlugin = {
     genReqId: require('hyperid')({urlSafe: true, fixedLength: true}),
 };
 
-export default plugin;
+export { pinoConf, plugin };

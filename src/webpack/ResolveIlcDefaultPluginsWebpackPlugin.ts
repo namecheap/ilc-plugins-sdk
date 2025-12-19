@@ -1,8 +1,9 @@
 import path from 'path';
 import { ilcPluginsPath } from './ilcPluginsPath';
-import type { Resolver, ResolvePluginInstance } from 'webpack';
+import type { Resolver } from 'webpack';
 
-export default class ResolveIlcDefaultPluginsWebpackPlugin implements ResolvePluginInstance {
+
+export class ResolveIlcDefaultPluginsWebpackPlugin {
     private source = 'resolve';
     private target = 'parsed-resolve';
 

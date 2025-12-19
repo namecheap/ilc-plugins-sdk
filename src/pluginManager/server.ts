@@ -11,7 +11,7 @@ import {
     I18nParamsDetectionPlugin,
 } from '../plugins/server.types';
 
-import defaultReportingPlugin from '../plugins/reporting/server';
+import { plugin as defaultReportingPlugin } from '../plugins/reporting/server';
 import defaultTransitionHooksPlugin from '../plugins/transitionHooks/server';
 import defaultI18nParamsDetectionPlugin from '../plugins/i18nParamsDetection/server';
 

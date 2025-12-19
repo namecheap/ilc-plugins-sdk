@@ -1,2 +1,2 @@
 export { DuplicateIlcPluginsWebpackPlugin } from './webpack/DuplicateIlcPluginsWebpackPlugin';
-export { default as ResolveIlcDefaultPluginsWebpackPlugin } from './webpack/ResolveIlcDefaultPluginsWebpackPlugin';
+export { ResolveIlcDefaultPluginsWebpackPlugin } from './webpack/ResolveIlcDefaultPluginsWebpackPlugin';

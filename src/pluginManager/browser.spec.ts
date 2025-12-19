@@ -56,13 +56,13 @@ describe('PluginManager', () => {
             method: () => {},
         };
 
-        const enum PluginPaths {
-            reporting = 'node_modules/@test/ilc-plugin-reporting-hooks',
-            reportingSecond = 'node_modules/@test/ilc-plugin-reporting-second-plugin',
-            transitionHooks = 'node_modules/@test/ilc-plugin-transition-hooks',
-            cloneOfTransitionHooks = 'node_modules/@test/ilc-plugin-that-is-clone-of-transition-hooks-plugin',
-            nonExistentType = 'node_modules/@test/ilc-plugin-with-non-existent-type',
-        }
+        const PluginPaths = {
+            reporting: 'node_modules/@test/ilc-plugin-reporting-hooks',
+            reportingSecond: 'node_modules/@test/ilc-plugin-reporting-second-plugin',
+            transitionHooks: 'node_modules/@test/ilc-plugin-transition-hooks',
+            cloneOfTransitionHooks: 'node_modules/@test/ilc-plugin-that-is-clone-of-transition-hooks-plugin',
+            nonExistentType: 'node_modules/@test/ilc-plugin-with-non-existent-type',
+        } as const;
 
         const plugins = {
             [PluginPaths.reporting]: { default: reportingPlugin },
@@ -92,7 +92,7 @@ describe('PluginManager', () => {
         afterEach(() => sandbox.restore());
 
         describe('from context', () => {
-            function context(pluginPath: PluginPaths) {
+            function context(pluginPath: typeof PluginPaths[keyof typeof PluginPaths]) {
                 return plugins[pluginPath];
             }
 
