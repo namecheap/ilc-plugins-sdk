@@ -61,8 +61,15 @@ export type Ruleset = Readonly<Record<ExperimentId, Experiment>>;
  * `getRuleset` is synchronous: it is called while resolving a request, so it must answer from
  * memory and never perform I/O. A plugin backed by a remote source is expected to keep its
  * in-memory copy fresh out-of-band (polling or SSE) and serve every call from that copy.
+ *
+ * Returning `undefined` means "this plugin has no ruleset to offer" — it has not filled its copy yet,
+ * or it has lost its source — and ILC then falls back to its own configuration. An EMPTY ruleset is a
+ * different answer and is honoured as given: it means "there are deliberately no experiments right
+ * now". The distinction matters because a remote source may legitimately publish an empty ruleset to
+ * switch every experiment off at once, and collapsing that into "nothing supplied" would make ILC fall
+ * back to stale configuration and turn them all back on.
  */
 export declare interface ExperimentsRulesetPlugin extends Plugin {
     type: 'experimentsRuleset';
-    getRuleset: () => Ruleset;
+    getRuleset: () => Ruleset | undefined;
 }

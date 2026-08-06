@@ -167,10 +167,11 @@ describe('PluginManager', () => {
                 chai.expect(pluginManager.getExperimentsRulesetPlugin()).to.be.eql(require('../plugins/experimentsRuleset/server').default);
             });
 
-            it('should return a default experiments ruleset plugin that supplies no experiments', () => {
-                // The default of this kind contributes nothing, so a host with no plugin installed
-                // keeps using its own ruleset source instead of an empty one coming from the SDK.
-                chai.expect(pluginManager.getExperimentsRulesetPlugin().getRuleset()).to.be.eql({});
+            it('should return a default experiments ruleset plugin that offers no ruleset', () => {
+                // The default of this kind contributes nothing, so a host with no plugin installed keeps
+                // using its own ruleset source. `undefined`, not `{}`: an empty ruleset is a real answer
+                // meaning "deliberately no experiments", which a host is expected to honour.
+                chai.expect(pluginManager.getExperimentsRulesetPlugin().getRuleset()).to.equal(undefined);
             });
         });
 
@@ -195,8 +196,8 @@ describe('PluginManager', () => {
                 chai.expect(pluginManager.getExperimentsRulesetPlugin()).to.be.eql(require('../plugins/experimentsRuleset/server').default);
             });
 
-            it('should return a default experiments ruleset plugin that supplies no experiments', () => {
-                chai.expect(pluginManager.getExperimentsRulesetPlugin().getRuleset()).to.be.eql({});
+            it('should return a default experiments ruleset plugin that offers no ruleset', () => {
+                chai.expect(pluginManager.getExperimentsRulesetPlugin().getRuleset()).to.equal(undefined);
             });
         });
     });
