@@ -44,6 +44,12 @@ describe('PluginManager', () => {
             method: () => {},
         };
 
+        const experimentsRulesetPlugin = {
+            type: 'experimentsRuleset',
+            property: 'propertyOfExperimentsRulesetPlugin',
+            method: () => {},
+        };
+
         const nonExistentType = {
             type: 'nonExistentType',
             property: 'propertyOfPluginWithNonExistentType',
@@ -54,6 +60,7 @@ describe('PluginManager', () => {
             reporting: 'node_modules/@test/ilc-plugin-reporting',
             i18nParamsDetection: 'node_modules/@test/ilc-plugin-i18n-params-detection',
             transitionHooks: 'node_modules/@test/ilc-plugin-transition-hooks',
+            experimentsRuleset: 'node_modules/@test/ilc-plugin-experiments-ruleset',
             cloneOfReporting: 'node_modules/@test/ilc-plugin-that-is-clone-of-reporting-plugin',
             nonExistentType: 'node_modules/@test/ilc-plugin-with-non-existent-type',
         } as const;
@@ -62,6 +69,7 @@ describe('PluginManager', () => {
             [PluginPaths.reporting]: reportingPlugin,
             [PluginPaths.i18nParamsDetection]: i18nParamsDetectionPlugin,
             [PluginPaths.transitionHooks]: { default: transitionHooksPlugin },
+            [PluginPaths.experimentsRuleset]: { default: experimentsRulesetPlugin },
             [PluginPaths.cloneOfReporting]: cloneOfReporting,
             [PluginPaths.nonExistentType]: nonExistentType,
         };
@@ -70,6 +78,7 @@ describe('PluginManager', () => {
             reportingPlugin,
             i18nParamsDetectionPlugin,
             transitionHooksPlugin,
+            experimentsRulesetPlugin,
             cloneOfReporting,
             nonExistentType,
         ];
@@ -98,6 +107,10 @@ describe('PluginManager', () => {
             it('should return transition hooks plugin', () => {
                 chai.expect(pluginManager.getTransitionHooksPlugin()).to.be.equals(transitionHooksPlugin);
             });
+
+            it('should return experiments ruleset plugin', () => {
+                chai.expect(pluginManager.getExperimentsRulesetPlugin()).to.be.equals(experimentsRulesetPlugin);
+            });
         });
 
         describe('from plugins', () => {
@@ -115,6 +128,10 @@ describe('PluginManager', () => {
 
             it('should return transition hooks plugin', () => {
                 chai.expect(pluginManager.getTransitionHooksPlugin()).to.be.equals(transitionHooksPlugin);
+            });
+
+            it('should return experiments ruleset plugin', () => {
+                chai.expect(pluginManager.getExperimentsRulesetPlugin()).to.be.equals(experimentsRulesetPlugin);
             });
         });
     });
@@ -145,6 +162,16 @@ describe('PluginManager', () => {
             it('should return null while getting transition hooks plugin', () => {
                 chai.expect(pluginManager.getTransitionHooksPlugin()).to.be.eql(require('../plugins/transitionHooks/server').default);
             });
+
+            it('should return null while getting experiments ruleset plugin', () => {
+                chai.expect(pluginManager.getExperimentsRulesetPlugin()).to.be.eql(require('../plugins/experimentsRuleset/server').default);
+            });
+
+            it('should return a default experiments ruleset plugin that supplies no experiments', () => {
+                // The default of this kind contributes nothing, so a host with no plugin installed
+                // keeps using its own ruleset source instead of an empty one coming from the SDK.
+                chai.expect(pluginManager.getExperimentsRulesetPlugin().getRuleset()).to.be.eql({});
+            });
         });
 
         describe('from plugins', () => {
@@ -162,6 +189,14 @@ describe('PluginManager', () => {
 
             it('should return null while getting transition hooks plugin', () => {
                 chai.expect(pluginManager.getTransitionHooksPlugin()).to.be.eql(require('../plugins/transitionHooks/server').default);
+            });
+
+            it('should return null while getting experiments ruleset plugin', () => {
+                chai.expect(pluginManager.getExperimentsRulesetPlugin()).to.be.eql(require('../plugins/experimentsRuleset/server').default);
+            });
+
+            it('should return a default experiments ruleset plugin that supplies no experiments', () => {
+                chai.expect(pluginManager.getExperimentsRulesetPlugin().getRuleset()).to.be.eql({});
             });
         });
     });

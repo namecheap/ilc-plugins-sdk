@@ -49,6 +49,20 @@ custom behaviour for request ID generation & handling.
 
 Should implement `I18nParamsDetectionPlugin` interface.
 
+
+#### Experiments ruleset plugin
+
+Should implement `ExperimentsRulesetPlugin` interface. Supplies the A/B experiment ruleset that ILC
+evaluates, so a deployment may take experiment definitions from a source of its own instead of ILC
+configuration.
+
+`getRuleset()` is called while a request is being resolved and is synchronous, so it must answer from
+memory and never perform I/O. A plugin backed by a remote source is expected to keep its in-memory
+copy fresh out-of-band (polling or SSE) and serve every call from that copy.
+
+When no plugin of this type is installed the default supplies an empty ruleset, so ILC keeps using
+its own ruleset source exactly as it did before this plugin type existed.
+
 ### Isomorphic plugins
 
 Plugins of this type should provide 2 entry points, for the server & browser side respectively.

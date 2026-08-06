@@ -9,11 +9,13 @@ import {
     IlcReportingPlugin,
     TransitionHooksPlugin,
     I18nParamsDetectionPlugin,
+    ExperimentsRulesetPlugin,
 } from '../plugins/server.types';
 
 import { plugin as defaultReportingPlugin } from '../plugins/reporting/server';
 import defaultTransitionHooksPlugin from '../plugins/transitionHooks/server';
 import defaultI18nParamsDetectionPlugin from '../plugins/i18nParamsDetection/server';
+import defaultExperimentsRulesetPlugin from '../plugins/experimentsRuleset/server';
 
 export default class PluginManager extends CommonPluginManager implements PluginManagerPublicApi {
     /**
@@ -22,7 +24,7 @@ export default class PluginManager extends CommonPluginManager implements Plugin
     constructor(...plugins: Context[]);
     constructor(...plugins: Plugin[]);
     constructor(...plugins: Context[] | Plugin[]) {
-        super(['reporting', 'transitionHooks', 'i18nParamsDetection'], ...plugins);
+        super(['reporting', 'transitionHooks', 'i18nParamsDetection', 'experimentsRuleset'], ...plugins);
     }
 
     getReportingPlugin() {
@@ -38,5 +40,10 @@ export default class PluginManager extends CommonPluginManager implements Plugin
     getI18nParamsDetectionPlugin() {
         const [i18nParamsDetection] = this.pluginsByType('i18nParamsDetection');
         return i18nParamsDetection as I18nParamsDetectionPlugin || defaultI18nParamsDetectionPlugin;
+    }
+
+    getExperimentsRulesetPlugin() {
+        const [experimentsRulesetPlugin] = this.pluginsByType('experimentsRuleset');
+        return experimentsRulesetPlugin as ExperimentsRulesetPlugin || defaultExperimentsRulesetPlugin;
     }
 }
