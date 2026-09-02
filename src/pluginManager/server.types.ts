@@ -6,10 +6,12 @@ export interface PluginManagerPublicApi {
     getReportingPlugin(): server.IlcReportingPlugin;
     getTransitionHooksPlugin(): server.TransitionHooksPlugin;
     getI18nParamsDetectionPlugin(): server.I18nParamsDetectionPlugin;
+    getExperimentsRulesetPlugin(): server.ExperimentsRulesetPlugin;
 }
 
 export interface Plugins {
     reporting?: server.IlcReportingPlugin;
     transitionHooks?: server.TransitionHooksPlugin;
     i18nParamsDetection?: server.I18nParamsDetectionPlugin;
+    experimentsRuleset?: server.ExperimentsRulesetPlugin;
 }

@@ -3,3 +3,4 @@ export * from './reporting/server.types';
 export * from './transitionHooks/server.types';
 export * from './transitionHooks/common.types';
 export * from './i18nParamsDetection/server.types';
+export * from './experimentsRuleset/server.types';
