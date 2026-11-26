@@ -1,5 +1,10 @@
 # SDK for ILC plugins development
 
+> [!IMPORTANT]
+> This package has moved to the [ilc-monorepo](https://github.com/namecheap/ilc-monorepo/tree/master/packages/ilc-plugins-sdk) repository.
+> Development continues there, so please open new issues and pull requests in that repository.
+> The npm package name `ilc-plugins-sdk` stays the same. This repository is no longer updated.
+
 [![NPM package](https://badgen.net/npm/v/ilc-plugins-sdk?color=red&icon=npm&label=)](https://www.npmjs.com/package/ilc-plugins-sdk)
 [![NPM downloads](https://badgen.net/npm/dt/ilc-plugins-sdk)](https://www.npmjs.com/package/ilc-plugins-sdk)
 
